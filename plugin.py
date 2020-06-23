@@ -53,9 +53,7 @@ class BasePlugin:
         if Parameters["Mode6"] != "0":
             Domoticz.Debugging(int(Parameters["Mode6"]))
             DumpConfigToLog()
-        self.httpConn = self.connection()
-        self.httpConn.Connect()
-        
+               
         for x in range(len(Devices), self.channels):
             Domoticz.Device(Name="Light_"+str(x+1), Unit=x+1, TypeName="Switch", Used=1).Create()
         for x in range(self.channels,len(Devices)):
@@ -126,20 +124,9 @@ class BasePlugin:
 #        Domoticz.Log("onDisconnect called for connection to: "+Connection.Address+":"+Connection.Port)
 
     def onHeartbeat(self):
-        if (self.httpConn != None and (self.httpConn.Connecting() or self.httpConn.Connected())):
-             unused=0
-#            Domoticz.Debug("onHeartbeat called, Connection is alive.")
-        else:
-            self.runAgain = self.runAgain - 1
-            if self.runAgain <= 0:
-                if (self.httpConn == None):
-                    self.httpConn = self.connection()
-                self.httpConn.Connect()
-                self.runAgain = 1
-            else:
-                unused=0
-#                Domoticz.Debug("onHeartbeat called, run again in "+str(self.runAgain)+" heartbeats.")
-
+        self.httpConn = self.connection()
+        self.httpConn.Connect()
+                 
 global _plugin
 _plugin = BasePlugin()
 
